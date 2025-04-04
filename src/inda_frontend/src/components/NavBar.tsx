@@ -146,7 +146,7 @@ export const NavBar = () => {
     <>
       <NavContainer>
         <NavContent>
-          <Logo>Inda<span>social</span></Logo>
+          <Logo>Inda<span>social </span></Logo>
           
           <DesktopNav>
             <NavLink href="#home">Home</NavLink>
@@ -170,7 +170,6 @@ export const NavBar = () => {
           </MobileMenuButton>
         </NavContent>
       </NavContainer>
-
       <MobileMenu isOpen={isMenuOpen}>
         <MobileNavLink href="#home">Home</MobileNavLink>
         <MobileNavLink href="#features">Features</MobileNavLink>

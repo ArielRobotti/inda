@@ -1,22 +1,38 @@
 module {
-    public type DataUser = {
+
+    public type EditableData = {
+        phone: ?Nat;
+        email: Text;
+        wallet: ?Principal
+    };
+
+    public type User = EditableData and {
         principalId: Principal;
         name: Text;
-        lastName: ?Text;
-        email: ?Text;
-        phone: ?Nat;
+        lastName: Text;
         kyc: Bool;
         country: ?Text;
-        wallet: ?Principal
         // agregar campos comunes a todos lo tipos de usuario
     };
 
-    public type UserCreator = DataUser and {
-        publications: Publication;
-        webSite: Text;
+    public let userDefaultValues = {
+        name= "";
+        lastName = "";
+        email = "";
+        phone = null;
+        kyc =  false;
+        country = null;
+        wallet = null 
     };
 
-    public type UserBrand = DataUser and {
+
+    public type UserCreator = User and {
+        publications: Publication;
+        webSite: Text;
+        // Agregar campos relacionados al usuario en calidad de creador de contenido
+    };
+
+    public type UserBrand = User and {
         brandName: Text;
         industry: Industry;
         availableCountries: [Text];
