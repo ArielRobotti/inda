@@ -126,6 +126,12 @@ module {
         author: {principal: Principal; name: Text};
         title: Text;
         content: Content;
+        access: AccessPost;
+    };
+
+    public type AccessPost = {
+        #Public;
+        #MembersOnly;
     };
 
     public type Industry = {

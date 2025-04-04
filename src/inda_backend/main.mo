@@ -247,7 +247,7 @@ shared ({ caller = Deployer }) actor class ( ) = {
     //TODO
   };
 
-  public shared ({ caller }) func publish({title: Text; content: Types.Content}): async {#Ok: Nat; #Err: Text}{
+  public shared ({ caller }) func publish({access: Types.AccessPost; title: Text; content: Types.Content}): async {#Ok: Nat; #Err: Text}{
     let creator = Map.get<Principal, Creator>(creators, phash, caller);
     switch creator {
       case null { return #Err("Caller is not a creator")};
@@ -257,6 +257,7 @@ shared ({ caller = Deployer }) actor class ( ) = {
           author = {principal = caller; name = creator.name};
           title;
           content;
+          access;
         };
 
         lastPubId += 1;
@@ -267,5 +268,33 @@ shared ({ caller = Deployer }) actor class ( ) = {
     }
   };
 
+  func hasPermission(user: Principal): Bool {
+    Map.has<Principal, Creator>(creators, phash, user) or
+    Map.has<Principal, Brand>(brands, phash, user) or
+    Map.has<Principal, Partnership>(partnerships, phash, user)
+  };
+
+  public shared ({ caller }) func readPublication(id:Nat): async {#Ok: Publication; #Err: Text} {
+    let pub = Map.get<Nat, Publication>(publications, nhash, id);
+    switch pub {
+      case null { return #Err("Publication not found")};
+      case (?pub) {
+        switch (pub.access){
+          case (#Public){ #Ok(pub)};
+          case (#MembersOnly) {
+            if(hasPermission(caller)){
+              #Ok(pub)
+            } else {
+              return #Err("You don't have permission to read this publication")
+            }
+            
+          }
+        }
+      }
+    }
+
+  };
+   
+   
 
 };
